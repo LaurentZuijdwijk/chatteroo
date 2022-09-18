@@ -13,5 +13,8 @@
     "test": "echo \"Error: no test specified\" && exit 1"
   },
   "author": "Laurent Zuijdwijk",
-  "license": "ISC"
+  "license": "ISC",
+  "dependencies": {
+    "natural": "^5.2.3"
+  }
 }

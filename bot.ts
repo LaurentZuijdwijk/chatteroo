@@ -8,7 +8,7 @@ import { HelpIntent } from './intents/HelpIntent';
 
 
 
-new Chatteroo({log:console.log, debug:true})
+new Chatteroo({log:console.log, debug:false})
 .addIntent(new StartIntent())
 .addIntent(new EndIntent())
 .addIntent(new JobSearchIntent())

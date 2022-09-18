@@ -1,5 +1,6 @@
 import {Context, IIntent} from './Intent'
 import readline from 'readline';
+import { classifier } from '../classifier';
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -29,7 +30,11 @@ export class Chatteroo {
         this.next = this.next.bind(this)
     }
     onMessage(msg:string){
-        const intent = this.intents.find(i => i.match(msg));
+        const parsedMsg = classifier.classify(msg);
+        let intent = this.intents.find(i => i.match(msg));
+        if(!intent){
+            intent = this.intents.find(i => i.match(parsedMsg));
+        }
         this.ctx.log('found intent for msg', msg, intent)
         
         if(intent)
