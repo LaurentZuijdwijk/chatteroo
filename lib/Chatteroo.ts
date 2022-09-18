@@ -7,11 +7,14 @@ const rl = readline.createInterface({
     output: process.stdout
 });
 
+const question = (q:string):Promise<string> => new Promise(resolve=>{
+    rl.question(q, (answer)=> resolve(answer.toString()));
+});
+
 type options = {
     debug:boolean;
     log:(...args:any[])=>void
 }
-
 
 export class Chatteroo {
     intents: IIntent[] = [];
@@ -22,7 +25,7 @@ export class Chatteroo {
         }
         this.ctx = {
             switchIntent: this.next.bind(this),
-            question: rl.question.bind(rl),
+            question,
             sendMsg: console.log,
             log,
             debug: options.debug
@@ -55,12 +58,12 @@ export class Chatteroo {
         this.intents[0].start(this.ctx, (msg?:string) => this.next(msg));
     }
 
-    next(msg?:string){
+    async next(msg?:string){
         if(msg) this.onMessage(msg);
         else {
-            this.ctx.question('Do you have any other questions? \n', (answer:string) => {
-                this.onMessage(answer);
-            });
+            const answer = await this.ctx.question('Do you have any other questions? \n');
+            this.onMessage(answer);
+            
         }
     }
 }

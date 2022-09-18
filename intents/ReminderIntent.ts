@@ -6,7 +6,7 @@ export class ReminderIntent extends Intent implements IIntent {
     entities = [SubjectEntity, TimeEntity];
 
     match(msg: string): boolean {
-        return msg.toLowerCase().includes('reminder') || (msg.includes('remind')&& msg.includes('me'))
+        return msg.toLowerCase().includes('reminder') || (msg.includes('remind') && msg.includes('me'))
     }
     async finally(ctx: Context, next: () => void) {
         await sleep(1500);
@@ -18,19 +18,18 @@ export class ReminderIntent extends Intent implements IIntent {
 }
 
 const SubjectEntity: Entity = async (ctx: Context, next) => {
-    ctx.question('What do you want me to remind you of? \n', (answer) => {
-        ctx.sendMsg(`Ok, I'll remind you of ${answer}`);
-        next(answer);
-    });
+    const answer = await ctx.question('What do you want me to remind you of? \n')
+    ctx.sendMsg(`Ok, I'll remind you of ${answer}`);
+    next(answer);
+
 }
 
 const TimeEntity: Entity = async (ctx: Context, next) => {
-    ctx.question('Wht time would you like to be reminded?  \n', (answer) => {
-        if(answer === 'cancel'){
-            ctx.switchIntent()
-        }
-        else {
-            next(answer);
-        }
-    });
+    const answer = await ctx.question('Wht time would you like to be reminded?  \n')
+    if (answer === 'cancel') {
+        ctx.switchIntent()
+    }
+    else {
+        next(answer);
+    }
 };

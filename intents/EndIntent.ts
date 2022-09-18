@@ -9,16 +9,14 @@ export class EndIntent extends Intent implements IIntent {
         return msg === 'bye' || msg === 'no' || msg === 'exit'
     }
 
-    async finally(ctx: Context, next:(msg?:string)=>void) {
-        ctx.question('Are you sure you want to exit? \n', async (answer)=>{
-            if(answer === 'yes'){
-                await sleep(1500);
-
-                ctx.sendMsg('okthxbye 👋')
-                process.exit()
-            } else {
-                next();
-            }
-        })
+    async finally(ctx: Context, next: (msg?: string) => void) {
+        const answer = await ctx.question('Are you sure you want to exit? \n');
+        if (answer === 'yes') {
+            await sleep(1500);
+            ctx.sendMsg('okthxbye 👋')
+            process.exit()
+        } else {
+            next();
+        }
     }
 }
