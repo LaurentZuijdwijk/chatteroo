@@ -21,6 +21,9 @@ classifier.addDocument('My applications', 'application');
 classifier.addDocument('help me', 'help');
 classifier.addDocument('I want assistance', 'help');
 classifier.addDocument('What to do', 'help');
+classifier.addDocument('What questions can I ask?', 'help');
+classifier.addDocument('How can you help me?', 'help');
+
 classifier.addDocument('which commands do you support', 'help');
 
 classifier.train();

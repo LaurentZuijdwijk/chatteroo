@@ -8,7 +8,7 @@ export class ReminderIntent extends Intent implements IIntent {
     match(msg: string): boolean {
         return msg.toLowerCase().includes('reminder') || (msg.includes('remind') && msg.includes('me'))
     }
-    async finally(ctx: Context, next: () => void) {
+    async finally(ctx: Context, next: (msg?:string) => void) {
         await sleep(1500);
 
         ctx.sendMsg(`Ok, I will remind you of ${ctx.ReminderIntent.SubjectEntity} @ ${ctx.ReminderIntent.TimeEntity}`)

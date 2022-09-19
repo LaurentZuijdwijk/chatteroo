@@ -10,16 +10,18 @@ export type Context = Record<string, any> & {
 
 export interface INextable {
     next: (ctx: Context) => Promise<void>;
+    start: (ctx: Context, fn: () => void) => void;
 }
 export interface IIntent {
+    begin?: (ctx: Context, next: () => void) => Promise<void>;
     finally: (ctx: Context, next: () => void) => Promise<void>;
-    start: (ctx: Context, fn: () => void) => void;
-    match: (msg: string) => boolean
+    match: (msg: string) => boolean;
 }
 
 export class Intent implements INextable {
     entities: Entity[] = []
     answered: Entity[] = []
+    _begun = false;
     nextFn: (str?: string) => void = () => { };
     name: string = '';
     constructor() {
@@ -38,7 +40,11 @@ export class Intent implements INextable {
             ctx[this.name] = {};
         }
         this.next(ctx);
+    }
 
+    reset(ctx:Context) {
+        this._begun = false;
+        ctx[this.name] = {}
     }
     /**
      * Intents are tested against this match function when a previous intent ends, or when ctx.switchIntent is called.
@@ -46,7 +52,7 @@ export class Intent implements INextable {
      * @returns boolean value.
      */
     match(utterance: string) {
-        return false
+        return false;
     }
     /**
      * go through the entities and resolve the values. 
@@ -55,7 +61,13 @@ export class Intent implements INextable {
     async next(ctx: Context) {
         const entity = this.entities.find(e => (ctx[this.name] as any)[e.name] === undefined)
 
-        if (entity) {
+        const self = this as unknown as IIntent;
+        if(typeof self.begin === 'function' && !this._begun){
+            this._begun = true;
+            self.begin(ctx, ()=>this.next(ctx));
+        }
+
+        else if (entity) {
             const cb = (val: string) => {
                 (ctx[this.name] as any)[entity.name] = val;
                 ctx.log(val, ctx, this.name);
@@ -65,8 +77,8 @@ export class Intent implements INextable {
             entity(ctx, cb)
         } else {
             ctx.log('wrap', ctx, this.name);
-            if ((this as unknown as IIntent).finally) {
-                (this as unknown as IIntent).finally(ctx, (msg?: string) => this.nextFn(msg));
+            if (self.finally) {
+                self.finally(ctx, (msg?: string) => this.nextFn(msg));
             }
         }
     }

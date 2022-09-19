@@ -1,4 +1,4 @@
-import {Context, IIntent} from './Intent'
+import {Context, IIntent, INextable} from './Intent'
 import readline from 'readline';
 import { classifier } from '../classifier';
 
@@ -17,7 +17,7 @@ type options = {
 }
 
 export class Chatteroo {
-    intents: IIntent[] = [];
+    intents: (IIntent & INextable)[] = [];
     ctx:Context;
     constructor(options:options = {debug:false, log:console.log}) {
         const log = (...args:any[])=>{
@@ -49,7 +49,7 @@ export class Chatteroo {
         }
     }
 
-    addIntent(intent:IIntent){
+    addIntent(intent:IIntent & INextable){
         this.intents.push(intent);
         return this;
     }
@@ -62,8 +62,7 @@ export class Chatteroo {
         if(msg) this.onMessage(msg);
         else {
             const answer = await this.ctx.question('Do you have any other questions? \n');
-            this.onMessage(answer);
-            
+            this.onMessage(answer);     
         }
     }
 }

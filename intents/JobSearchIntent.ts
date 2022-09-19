@@ -9,6 +9,12 @@ export class JobSearchIntent extends Intent implements IIntent {
     match(msg: string): boolean {
         return msg.includes('find') && msg.includes('job')
     }
+    async begin(ctx: Context, next: () => void) {
+        await sleep(500);
+        ctx.sendMsg(`I’ve got quite a few new jobs for you today.<br><br>In 4 easy steps, I can filter them with you 😃.`)
+        await sleep(500);
+        next();
+    }
     async finally(ctx: Context, next: () => void) {
         await sleep(1500);
 
@@ -21,13 +27,13 @@ export class JobSearchIntent extends Intent implements IIntent {
 }
 
 const LocationEntity: Entity = async (ctx: Context, next) => {
-    const answer = await ctx.question('Where do you want to work? \n');
+    const answer = await ctx.question('OK, let’s figure out where you want to work.\n');
     ctx.sendMsg(`Ok, you want to work in ${answer}`);
     next(answer);
 }
 
 const SalaryEntity: Entity = async (ctx: Context, next) => {
-    const answer = await ctx.question('How much would you like to earn?  \n');
+    const answer = await ctx.question('Is there anything we should consider regarding salary?\n');
     if (answer === 'application') {
         ctx.switchIntent('application')
     }
@@ -42,7 +48,7 @@ const SalaryEntity: Entity = async (ctx: Context, next) => {
 };
 
 const DescriptionEntity: Entity = async (ctx: Context, next) => {
-    const answer = await ctx.question('What kind of job do you want to find?  \n');
+    const answer = await ctx.question('What are you looking for?  \n');
     ctx.sendMsg(`Oh, so you want to work as a ${answer}`);
     next(answer);
 }
