@@ -15,7 +15,7 @@ export const handleMsg = async (msg: string) => {
   {name:'create CV', entities: null}]
   {name:'application status', entities: null}]
 
-  json object with an intent and possible entities from the utterance above
+  json object with an intent and possible entities from the utterance above. each value can be in one entity
 
   example json:
     {
@@ -40,9 +40,14 @@ export const handleMsg = async (msg: string) => {
     return true
   })
   .filter((el:any) => {
+    if(el.name === 'JobTitle') return el.value !== 'work'
+    return true
+  })
+  .filter((el:any) => {
     if(el.name === 'JobTitle') return el.value !== 'jobs'
     return true
   })
+  console.log(resultJSON)
 return resultJSON
 }
 

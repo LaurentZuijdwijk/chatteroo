@@ -54,17 +54,21 @@ export class JobSearchIntent extends Intent implements IIntent {
 }
 
 const Generic: Entity = async (ctx: Context, next) => {
-  
+  const missing = ['Location', 'JobTitle', 'Salary'].filter((el:any)=>
+    ctx.JobSearch[el] === undefined
+  )
+  console.log(missing)
+
   let answer = await ctx.question(
-    "OK, give me some more details, like location, salary and description.\n"
+    `OK, give me some more details, like ${missing.map(el=>el.toLowerCase()).join(', ')}.\n`
   );
 
-  const parsedAnswer = await handleEntity(answer, 'location, salary, jobTitle');
+  const parsedAnswer = await handleEntity(answer, missing.join(', '));
     console.log(parsedAnswer);
   
-    ctx.JobSearch.Location = parsedAnswer.location || undefined
-    ctx.JobSearch.JobTitle = parsedAnswer.JobTitle || undefined
-    ctx.JobSearch.Salary = parsedAnswer.salary || undefined
+    ctx.JobSearch.Location = parsedAnswer.Location || ctx.JobSearch.Location
+    ctx.JobSearch.JobTitle = parsedAnswer.JobTitle || ctx.JobSearch.JobTitle
+    ctx.JobSearch.Salary = parsedAnswer.Salary || ctx.JobSearch.Salary
 
   // answer = parsedAnswer.name == 'location' ? parsedAnswer.value : null;
   ctx.sendMsg(`Ok, thank you`);
