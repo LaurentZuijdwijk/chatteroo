@@ -4,13 +4,12 @@ import { Intent, IIntent, Context } from "../lib/Intent";
 
 export class ReminderIntent extends Intent implements IIntent {
     entities = [SubjectEntity, TimeEntity];
-
+    name = "reminder"
     match(msg: string): boolean {
         return msg.toLowerCase().includes('reminder') || (msg.includes('remind') && msg.includes('me'))
     }
     async finally(ctx: Context, next: (msg?:string) => void) {
         await sleep(1500);
-
         ctx.sendMsg(`Ok, I will remind you of ${ctx.ReminderIntent.SubjectEntity} @ ${ctx.ReminderIntent.TimeEntity}`)
         await sleep(1500);
         next();
@@ -27,7 +26,7 @@ const SubjectEntity: Entity = async (ctx: Context, next) => {
 const TimeEntity: Entity = async (ctx: Context, next) => {
     const answer = await ctx.question('Wht time would you like to be reminded?  \n')
     if (answer === 'cancel') {
-        ctx.switchIntent()
+        ctx.switchIntent('find job')
     }
     else {
         next(answer);

@@ -1,3 +1,4 @@
+import React from 'react';
 import {Context, IIntent, INextable} from './Intent'
 // import readline from 'readline';
 // import { classifier } from '../classifier';
@@ -15,6 +16,7 @@ type options = {
     debug:boolean;
     log:(...args:any[])=>void
     addQuestion: (t:any)=>Promise<string>
+    addComponent: <T>(component:React.FC, props:any)=>Promise<T>
     sendMsg: (t:any)=>void,
     loading: ()=>void,
 }
@@ -22,17 +24,22 @@ type options = {
 export class Chatteroo {
     intents: (IIntent & INextable)[] = [];
     ctx:Context;
-    constructor(options:options = {debug:false, log:console.log, sendMsg:console.log, addQuestion:question, loading:()=>{}}) {
+    constructor(options:Partial<options> = {
+        debug:false, 
+        log:console.log, 
+        loading:()=>{}}) {
         const log = (...args:any[])=>{
-            if(options.debug) options.log(...args)
+            if(options.debug) options.log!(...args)
         }
         this.ctx = {
             switchIntent: this.next.bind(this),
-            question: options.addQuestion,
-            sendMsg: options.sendMsg,
-            loading: options.loading,
+            question: options?.addQuestion || question,
+            addComponent: <T>(component:React.FC, props:any)=> Promise.resolve({} as T),
+
+            sendMsg: options!.sendMsg || console.log,
+            loading: options?.loading,
             log,
-            debug: options.debug
+            debug: options.debug || false
         }
         this.next = this.next.bind(this)
     }
@@ -60,6 +67,8 @@ export class Chatteroo {
 
     options(options:Partial<options>){
         if(options?.addQuestion) this.ctx.question = options?.addQuestion;
+        if(options?.addComponent) this.ctx.addComponent = options?.addComponent;
+
         if(options?.sendMsg)     this.ctx.sendMsg = options.sendMsg
         if(options?.loading)     this.ctx.loading = options.loading
         return this

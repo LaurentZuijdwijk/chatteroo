@@ -15,6 +15,7 @@
   "author": "Laurent Zuijdwijk",
   "license": "ISC",
   "dependencies": {
-    "natural": "^5.2.3"
+    "natural": "^5.2.3",
+    "openai": "^3.0.0"
   }
 }

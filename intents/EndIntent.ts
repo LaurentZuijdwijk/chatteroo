@@ -2,8 +2,8 @@ import { Intent, IIntent, Context } from "../lib/Intent";
 import { sleep } from "../lib/sleep";
 
 export class EndIntent extends Intent implements IIntent {
-    name = "end"
-
+    name = "end intent"
+    description = "goodbye message"
     match(msg: string): boolean {
         msg = msg.toLowerCase()
         return msg === 'bye' || msg === 'no' || msg === 'exit'

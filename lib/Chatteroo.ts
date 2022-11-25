@@ -1,6 +1,7 @@
 import {Context, IIntent, INextable} from './Intent'
 import readline from 'readline';
 import { classifier } from '../classifier';
+import {handleMsg} from '../terminal-example/openai'
 
 const rl = readline.createInterface({
     input: process.stdin,
@@ -32,16 +33,21 @@ export class Chatteroo {
         }
         this.next = this.next.bind(this)
     }
-    onMessage(msg:string){
+    async onMessage(msg:string){
         const parsedMsg = classifier.classify(msg);
-        let intent = this.intents.find(i => i.match(msg));
-        if(!intent){
-            intent = this.intents.find(i => i.match(parsedMsg));
-        }
+        const result = await handleMsg(msg);
+        console.log(result.data.choices[0].text)
+        const resultJSON = JSON.parse(result.data.choices[0].text)
+
+
+        let intent = this.intents.find(i => i.match(resultJSON.intent));
+        // if(!intent){
+        //     intent = this.intents.find(i => i.match(parsedMsg));
+        // }
         this.ctx.log('found intent for msg', msg, intent)
         
         if(intent)
-            intent.start(this.ctx, this.next);
+            intent.start(this.ctx, this.next, resultJSON.entities);
         
         else {
             this.ctx.sendMsg(`I don't think I understood that...`)
@@ -65,4 +71,9 @@ export class Chatteroo {
             this.onMessage(answer);     
         }
     }
+    
+    toGraph(){
+
+    }
+
 }

@@ -10,7 +10,7 @@ export type Context = Record<string, any> & {
 
 export interface INextable {
     next: (ctx: Context) => Promise<void>;
-    start: (ctx: Context, fn: () => void) => void;
+    start: (ctx: Context, fn: () => void, entities?:{name:string;value:string}[]) => void;
 }
 export interface IIntent {
     begin?: (ctx: Context, next: () => void) => Promise<void>;
@@ -32,12 +32,18 @@ export class Intent implements INextable {
             this.name = this.constructor.name;
         }
     }
-    start(ctx: Context, nextFn: (msg?: string) => void) {
+    start(ctx: Context, nextFn: (msg?: string) => void, entities?:  {name:string; value:string;}[]) {
         this.nextFn = (msg?: string) => nextFn(msg);
         if (ctx[this.name]) {
             ctx[this.name] = {};
         } else {
             ctx[this.name] = {};
+        }
+        if(entities){
+            entities.forEach(el=>{
+                ctx[this.name][el.name] = el.value
+
+            })
         }
         this.next(ctx);
     }

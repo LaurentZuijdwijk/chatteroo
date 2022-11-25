@@ -17,6 +17,7 @@ classifier.addDocument('searching for a new position', 'find job');
 classifier.addDocument('What about my current applications', 'application');
 classifier.addDocument('what about the job I applied for', 'application');
 classifier.addDocument('My applications', 'application');
+classifier.addDocument('I want to be forgotten', 'forgotten');
 
 classifier.addDocument('help me', 'help');
 classifier.addDocument('I want assistance', 'help');

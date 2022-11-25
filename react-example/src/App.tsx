@@ -6,10 +6,7 @@ import { ChatBotContainer } from './ChatBotContainer';
 function App() {
   return (
     <div className="App">
-
-        <h1>ChatBot</h1>
-        <ChatBotContainer />
-  
+        <ChatBotContainer />  
     </div>
   );
 }

@@ -2,6 +2,9 @@ import { Intent, IIntent, Context } from "../lib/Intent";
 import { sleep } from "../lib/sleep";
 
 export class HelpIntent extends Intent implements IIntent {
+    name = "Help intent"
+    description = "Get help using the chatbot"
+
     match(msg: string): boolean {
         return msg === 'help'
     }

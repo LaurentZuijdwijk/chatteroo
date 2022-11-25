@@ -2,7 +2,8 @@ import { sleep } from "../lib/sleep";
 import { Context, IIntent, Intent } from "../lib/Intent";
 
 export class ApplicationIntent extends Intent implements IIntent{
-    name = "JobSearch"
+    name = "ApplicationStatus"
+    description = "view my applications"
     constructor() {
         super();
         this.entities = []

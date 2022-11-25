@@ -3,6 +3,8 @@ import { Entity } from "./Entity";
 export type Context = Record<string, any> & {
     question: (str: string) => Promise<string>;
     switchIntent: (msg?: string) => void;
+    addComponent: <T>(component:React.FC, props:any)=>Promise<T>;
+
     sendMsg: (msg: string) => void;
     debug: boolean;
     log: (...args: any[]) => void
