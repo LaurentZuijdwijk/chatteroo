@@ -13,6 +13,8 @@ export const findJobs = async (
 ): Promise<any> => {
   try {
     const { JobTitle, Location, Salary } = searchCriteria;
+
+    console.log(`${process.env.OFFER_BASE_URL}/listings/details?Offset=0&Limit=5&What=${JobTitle}&Where=${Location}&Radius=10&Salary=${Salary}&Lang=en&JobType=10`)
     
     const result = await axios.get(
       `${process.env.OFFER_BASE_URL}/listings/details?Offset=0&Limit=5&What=${JobTitle}&Where=${Location}&Radius=10&Salary=${Salary}&Lang=en&JobType=10`
