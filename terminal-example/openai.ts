@@ -1,6 +1,10 @@
 const { Configuration, OpenAIApi } = require("openai");
+const dotenv = require('dotenv');
+
+dotenv.config()
+
 const configuration = new Configuration({
-  apiKey: '',
+  apiKey: process.env.OPEN_AI,
 });
 const openai = new OpenAIApi(configuration);
 export const handleMsg = (msg:string)=>
