@@ -6,7 +6,9 @@ import { EndIntent } from '../intents/EndIntent';
 import { StartIntent } from '../intents/StartIntent';
 import { HelpIntent } from '../intents/HelpIntent';
 
+const dotenv = require('dotenv');
 
+dotenv.config()
 
 new Chatteroo({log:console.log, debug:false})
 .addIntent(new StartIntent())
