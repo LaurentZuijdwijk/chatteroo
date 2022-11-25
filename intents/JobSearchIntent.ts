@@ -8,17 +8,24 @@ export class JobSearchIntent extends Intent implements IIntent {
   name = "JobSearch";
   description = "Get help finding a job";
 
+  // entities = [JobTitle, Location, Salary];
   entities = [JobTitle, Location, Salary];
 
   match(msg: string): boolean {
     return msg.includes("find") && msg.includes("job");
   }
+
   async begin(ctx: Context, next: () => void) {
     await sleep(500);
     ctx.sendMsg(`I can help you find a job`);
+
+    await Generic(ctx, ()=>{});
+
     await sleep(500);
+
     next();
   }
+
   async finally(ctx: Context, next: () => void) {
     await sleep(1500);
 
@@ -46,6 +53,24 @@ export class JobSearchIntent extends Intent implements IIntent {
   }
 }
 
+const Generic: Entity = async (ctx: Context, next) => {
+  
+  let answer = await ctx.question(
+    "OK, give me some more details, like location, salary and description.\n"
+  );
+
+  const parsedAnswer = await handleEntity(answer, 'location, salary, jobTitle');
+    console.log(parsedAnswer);
+  
+    ctx.JobSearch.Location = parsedAnswer.location || undefined
+    ctx.JobSearch.JobTitle = parsedAnswer.JobTitle || undefined
+    ctx.JobSearch.Salary = parsedAnswer.salary || undefined
+
+  // answer = parsedAnswer.name == 'location' ? parsedAnswer.value : null;
+  ctx.sendMsg(`Ok, thank you`);
+  next();
+}
+
 const Location: Entity = async (ctx: Context, next) => {
   let answer = await ctx.question(
     "OK, let’s figure out where you want to work.\n"
@@ -60,7 +85,7 @@ const Location: Entity = async (ctx: Context, next) => {
 };
 
 const JobTitle: Entity = async (ctx: Context, next) => {
-  const answer = await ctx.question("What are you looking for?  \n");
+  const answer = await ctx.question("What job title are you looking for?  \n");
   ctx.sendMsg(`Oh, so you want to work as a ${answer}`);
   next(answer);
 };

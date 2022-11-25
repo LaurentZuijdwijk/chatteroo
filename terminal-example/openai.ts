@@ -20,7 +20,7 @@ export const handleMsg = async (msg: string) => {
   example json:
     {
         "intent": string,
-        "entities?: [{
+        "entities"?: [{
             name: string,
             value: string | number,
             confidence: float
@@ -52,14 +52,13 @@ export const handleEntity = async (msg: string, entityName:string) => {
   const result = await openai.createCompletion({
     model: "text-davinci-002",
     prompt: `Utterance: ${msg}  
-   Entity name: "${entityName}"
+   Entity name(s): ${entityName}
     
-  json object with a parsed entity
+  json object with a parsed entities
 
   example json:
     {
-        "name": string,
-        "value": string
+        "entityName": "value"
     }
 
   json: 
