@@ -76,15 +76,19 @@ const Generic: Entity = async (ctx: Context, next) => {
 }
 
 const Location: Entity = async (ctx: Context, next) => {
-  let answer = await ctx.question(
-    "OK, let’s figure out where you want to work.\n"
-  );
+  let answer = await ctx.mlEntityQuestion("OK, let’s figure out where you want to work.\n", 'Location');
+  // let answer = await ctx.question(
+  //   "OK, let’s figure out where you want to work.\n"
+  // );
 
-  const parsedAnswer = await handleEntity(answer, 'location');
-    console.log(parsedAnswer);
-  
-  answer = parsedAnswer.name == 'location' ? parsedAnswer.value : null;
-  ctx.sendMsg(`Ok, you want to work in ${answer}`);
+  // const parsedAnswer = await handleEntity(answer, 'location');
+  //   console.log(parsedAnswer);
+  if(answer.Location) {
+    ctx.sendMsg(`Ok, you want to work in ${answer.Location}`);
+    return next(answer.Location);
+  }
+  else return next()
+  // answer = parsedAnswer.name == 'location' ? parsedAnswer.value : null;
   next(answer);
 };
 

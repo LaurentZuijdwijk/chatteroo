@@ -1,0 +1,30 @@
+{
+    "name": "extract-job-keywords",
+    "version": "1.0.0",
+    "description": "Extract job search keywords from a message",
+    "main": "index.js",
+    "scripts": {
+        "start": "node extract",
+        "test": "jest",
+        "debug": "jest --findRelatedTests debug.test.js"
+    },
+    "repository": {
+        "type": "git",
+        "url": "git+https://github.com/Qarj/extract-job-keywords.git"
+    },
+    "keywords": [
+        "job",
+        "search",
+        "keywords",
+        "extract"
+    ],
+    "author": "Qarj",
+    "license": "UNLICENSED",
+    "bugs": {
+        "url": "https://github.com/Qarj/extract-job-keywords/issues"
+    },
+    "homepage": "https://github.com/Qarj/extract-job-keywords#readme",
+    "devDependencies": {
+        "jest": "^28.1.0"
+    }
+}
